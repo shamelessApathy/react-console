@@ -1,24 +1,48 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios';
 import './index.css';
 
+class Students extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			'Query':''
+		}
 
-class Console extends React.Component {
-	constructor(props){
-	  super(props);
 	}
-	search() {
-	let searchText = document.getElementById('search-field').value;
-	alert(searchText);
+	studentQuery()
+	{
+		  axios.get('http://hogwarts.local/students/view')
+    .then(response => console.log(response))
 	}
-	render(){
+	render()
+	{
 		return (
-			<div class='console'>
-				<h4 class='title'>React Console</h4>
-				<input name='search-field' id='search-field' type='text'/>
-				<button name='search-button' id='search-button' onClick={() => this.search()}>Search</button>
+		<div>
+			<div className="students">
+				<button onClick={() => this.studentQuery()}>View Students</button>
 			</div>
-			);
+		</div>
+		);
+	}
+}
+class Console extends React.Component {
+	constructor(props)
+	{
+		super(props);
+		this.state = null;
+	}
+	render()
+	{
+		return (
+		<div>
+			<div className="console">
+				<h4 className="title">React Console</h4>
+				<Students />																																																																																																																																																																																																																																																																																														this.renderStudents()}
+			</div>
+		</div>
+		);
 	}
 }
 
