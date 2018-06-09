@@ -39,7 +39,7 @@ class Console extends React.Component {
 		<div>
 			<div className="console">
 				<h4 className="title">React Console</h4>
-				<Students />																																																																																																																																																																																																																																																																																														this.renderStudents()}
+				<Students />
 			</div>
 		</div>
 		);
