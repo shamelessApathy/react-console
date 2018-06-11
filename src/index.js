@@ -13,7 +13,8 @@ class Students extends React.Component {
 	}
 	studentQuery()
 	{
-		  axios.get('http://hogwarts.local/students/view')
+		console.log('butotn cliciked');
+		  axios.get('http://localhost:3000/hogwarts/index.php')
     .then(response => console.log(response))
 	}
 	render()
