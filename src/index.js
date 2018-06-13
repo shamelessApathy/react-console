@@ -3,22 +3,47 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import './index.css';
 
-class Buttons extends React.Component {
-	constructor(props) {
+class Student extends React.Component {
+
+	render()
+	{
+		return(
+			<p>This is a student</p>
+
+			);
+	}
+}
+class Console extends React.Component {
+	constructor(props)
+	{
 		super(props);
-		this.state = {
-			'Query':''
+		this.state ={
+			students: [],
 		}
-		this.students = [];
+	}
+	renderStudents()
+	{
+		for (let student of this.state.students)
+		{
+			<Student />
+		}
+	}
+	setStudents(students)
+	{
+		this.setState({
+			students: students
+		})
+		console.log(this.state.students);
+		this.forceUpdate();
 
 	}
-	studentQuery()
+	getStudents()
 	{
 		console.log('butotn cliciked');
 		  axios.get('http://localhost:3001/students')
-    	.then(response => console.log(response))
+    	.then(response => this.setStudents(response.data))
 	}
-	classQuery()
+	getClasses()
 	{
 		console.log('class button clicked');
 			axios.get('http://localhost:3001/courses')
@@ -28,29 +53,11 @@ class Buttons extends React.Component {
 	{
 		return (
 		<div>
-			<div className="students">
-				<button onClick={() => this.studentQuery()}>View Students</button>
-			</div>
-			<div className="classes">
-				<button onClick={() => this.classQuery()}>View Courses</button>
-			</div>
-		</div>
-		);
-	}
-}
-class Console extends React.Component {
-	constructor(props)
-	{
-		super(props);
-		this.state = null;
-	}
-	render()
-	{
-		return (
-		<div>
 			<div className="console">
 				<h4 className="title">React Console</h4>
-				<Buttons />
+				<button onClick={()=> this.getStudents()}>Get Students</button>
+				<button onClick={() => this.getClasses()}>Get Classes</button>
+				{this.renderStudents()}
 			</div>
 		</div>
 		);
