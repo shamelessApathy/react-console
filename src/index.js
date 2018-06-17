@@ -3,13 +3,18 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import './index.css';
 
-class Student extends React.Component {
-
-	render()
+class Students extends React.Component
+{
+	constructor(props)
 	{
-		return(
-			<p>This is a student</p>
-
+		super(props);
+	}
+	render(container)
+	{
+		return (
+			<table>
+			{this.props.value}
+			</table>
 			);
 	}
 }
@@ -18,14 +23,27 @@ class Console extends React.Component {
 	{
 		super(props);
 		this.state ={
-			students: [],
+			students: 0,
 		}
 	}
 	renderStudents()
 	{
-		for (let student of this.state.students)
+		if (this.state.students !== 0)
 		{
-			<Student />
+		
+				let table = []
+				let children = []
+			 	//Inner loop to create children
+      			for (let j = 0; j < this.state.students.length; j++) 
+      			{
+        			children.push(this.state.students[j].name);
+      			}
+      			table.push(children);
+      			return (
+      				<Students 
+      					value={table}
+      				/>
+      			);
 		}
 	}
 	setStudents(students)
@@ -34,7 +52,7 @@ class Console extends React.Component {
 			students: students
 		})
 		console.log(this.state.students);
-		this.forceUpdate();
+		console.log('length: ' + this.state.students.length);
 
 	}
 	getStudents()
