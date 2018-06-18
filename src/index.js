@@ -33,10 +33,11 @@ class Console extends React.Component {
 		
 				let table = []
 				let children = []
+				table.push(<thead><tr><th>ID</th><th>NAME</th></tr></thead>);
 			 	//Inner loop to create children
       			for (let j = 0; j < this.state.students.length; j++) 
       			{
-        			children.push(this.state.students[j].name);
+        			children.push(<tr><td>{this.state.students[j].id}</td><td>{this.state.students[j].name}</td></tr>);
       			}
       			table.push(children);
       			return (
