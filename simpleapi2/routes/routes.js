@@ -71,6 +71,11 @@ var appRouter = function (app) {
 			})
 		})
 	})
+	// Create New Student Router and Function
+	app.post("/students/create", function(req, res){
+				res.header("Access-Control-Allow-Origin", "*");
+				res.send("Got to the end point");
+	})
 }
 
 module.exports = appRouter;

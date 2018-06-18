@@ -9,13 +9,16 @@ class Students extends React.Component
 	{
 		super(props);
 	}
+
 	render(container)
 	{
 		return (
-			<table>
-			{this.props.value}
-			</table>
-			);
+			<div>
+				<table>
+				{this.props.value}
+				</table>
+			</div>
+			); 
 	}
 }
 class Console extends React.Component {
@@ -26,6 +29,19 @@ class Console extends React.Component {
 			students: 0,
 		}
 	}
+	
+	createStudent()
+	{
+		console.log("inside createStudent() function");
+		let studentName = document.getElementById('student-name');
+		if (studentName.value !== "")
+		{
+			let student = studentName.value;
+			axios.post("http://localhost:3001/students/create", {student})
+			  .then(response => console.log(response))
+		}
+	}
+
 	renderStudents()
 	{
 		if (this.state.students !== 0)
@@ -33,17 +49,21 @@ class Console extends React.Component {
 		
 				let table = []
 				let children = []
-				table.push(<thead><tr><th>ID</th><th>NAME</th></tr></thead>);
+				table.push(<thead key="table-head"><tr key="heading-row"><th key="id-head">ID</th><th key="name-head">NAME</th><th key="options-head">OPTIONS</th></tr></thead>);
 			 	//Inner loop to create children
       			for (let j = 0; j < this.state.students.length; j++) 
       			{
-        			children.push(<tr><td>{this.state.students[j].id}</td><td>{this.state.students[j].name}</td></tr>);
+        			children.push(<tr key={"student" + j.toString()}><td key="id">{this.state.students[j].id}</td><td key={"name" + j.toString()}>{this.state.students[j].name}</td><td key={"options"+j.toString()}><button key={"update" + j.toString}>Update</button><button key={"delete"+j}>Delete</button></td></tr>);
       			}
-      			table.push(children);
+      			table.push(<tbody key="tbody">{children}</tbody>);
+
       			return (
-      				<Students 
-      					value={table}
-      				/>
+      				<div>
+	      				<Students 
+	      					value={table}
+	      				/>
+	      				<button onClick={()=> this.createStudent()}>Create New Student</button><input className="student-name" id="student-name" placeholder="New Student Name Here" type="text"/>
+      				</div>
       			);
 		}
 	}
