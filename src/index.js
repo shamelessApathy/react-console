@@ -29,7 +29,14 @@ class Console extends React.Component {
 			students: 0,
 		}
 	}
-	
+	checkStudentResponse(response)
+	{
+		if (response.data === "success")
+		{
+			console.log("got a success message!");
+			this.getStudents();
+		}
+	}
 	createStudent()
 	{
 		console.log("inside createStudent() function");
@@ -38,7 +45,7 @@ class Console extends React.Component {
 		{
 			let student = studentName.value;
 			axios.post("http://localhost:3001/students/create", {student})
-			  .then(response => console.log(response))
+			  .then(response => this.checkStudentResponse(response))
 		}
 	}
 
