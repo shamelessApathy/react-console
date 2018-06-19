@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import './index.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 
 class Students extends React.Component
 {
@@ -80,7 +81,7 @@ class Console extends React.Component {
 			 	//Inner loop to create children
       			for (let j = 0; j < this.state.students.length; j++) 
       			{
-        			children.push(<tr key={"student" + j.toString()}><td key="id">{this.state.students[j].id}</td><td key={"name" + j.toString()}>{this.state.students[j].name}</td><td key={"options"+j.toString()}><button key={"update" + j.toString}>Update</button><button key={"delete"+j}>Delete</button></td></tr>);
+        			children.push(<tr key={"student" + j.toString()}><td key="id">{this.state.students[j].id}</td><td key={"name" + j.toString()}>{this.state.students[j].name}</td><td key={"options"+j.toString()}><button data-id={this.state.students[j].id} key={"update" + j.toString}>Update</button><button data-id={this.state.students[j].id} key={"delete"+j}>Delete</button></td></tr>);
       			}
       			table.push(<tbody key="tbody">{children}</tbody>);
 
@@ -135,7 +136,7 @@ class Console extends React.Component {
 			//Inner loop to create children
       		for (let j = 0; j < this.state.courses.length; j++) 
       		{
-        		children.push(<tr key={"student" + j.toString()}><td key="id">{this.state.courses[j].id}</td><td key={"name" + j.toString()}>{this.state.courses[j].name}</td><td key={"options"+j.toString()}><button key={"update" + j.toString}>Update</button><button key={"delete"+j}>Delete</button></td></tr>);
+        		children.push(<tr key={"student" + j.toString()}><td key="id">{this.state.courses[j].id}</td><td key={"name" + j.toString()}>{this.state.courses[j].name}</td><td key={"options"+j.toString()}><button data-id={this.state.courses[j].id} key={"update" + j.toString}>Update</button><button data-id={this.state.courses[j].id} key={"delete"+j}>Delete</button></td></tr>);
       		}
       		table.push(<tbody key="tbody">{children}</tbody>);
    			return (
@@ -154,11 +155,18 @@ class Console extends React.Component {
 		<div>
 			<div className="console">
 				<h4 className="title">React Console</h4>
+				<div className="container">
+				<div className="row">
+				<div className="col-sm">
 				<button className="students-button" onClick={()=> this.getStudents()}>Get Students</button>
-				<button className="classes-button" onClick={() => this.getCourses()}>Get Courses</button>
-				<div className="clear"></div>
 				{this.renderStudents()}
+				</div>
+				<div className="col-sm">
+				<button className="classes-button" onClick={() => this.getCourses()}>Get Courses</button>
 				{this.renderCourses()}
+				</div>
+				</div>
+				</div>
 			</div>
 		</div>
 		);
