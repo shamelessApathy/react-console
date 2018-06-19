@@ -50,6 +50,35 @@ var appRouter = function (app) {
 			})
 		})
 	})
+	// Create New Course Router and Function
+	app.post("/courses/create", function(req, res){
+				console.log("In createCourse on Node side");
+				console.log(req.body.course);
+				var course = req.body.course;
+
+				var mysql = require('mysql');
+				var con = mysql.createConnection({
+					host:"localhost",
+					user:"test",
+					password:"test",
+					database:"Hogwarts"
+				});
+
+				con.connect(function(err){
+					if (err) throw err;
+					console.log("Connected!");
+					var sql = "INSERT INTO Courses (name) VALUES ('" + course +"');";
+					console.log(sql);
+					con.query(sql, function(err, result){
+						if (err) throw err;
+						if (result.affectedRows === 1)
+						{
+							res.header("Access-Control-Allow-Origin", "*");
+							res.send("success");
+						}
+					})
+				})				
+	})
 	app.get("/students", function(req, res){
 		var students = [];
 		var mysql = require('mysql');
@@ -98,9 +127,7 @@ var appRouter = function (app) {
 							res.send("success");
 						}
 					})
-				})
-				//res.header("Access-Control-Allow-Origin", "*");
-				
+				})				
 	})
 }
 

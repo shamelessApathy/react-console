@@ -110,6 +110,33 @@ class Console extends React.Component {
 		  axios.get('http://localhost:3001/students')
     	.then(response => this.setStudents(response.data))
 	}
+	checkCourseResponse(response)
+	{
+		if (response.data === "success")
+		{
+			console.log("got a success message!");
+			this.getCourses();
+		}
+	}
+	createCourse()
+	{
+		console.log("inside createCourse() function");
+		let courseName = document.getElementById('course-name');
+		if (courseName.value !== "")
+		{
+			let course = courseName.value;
+			axios.post("http://localhost:3001/courses/create", {course})
+			  .then(response => this.checkCourseResponse(response))
+		}
+	}
+	showCoursesUpdateContainer(courseId, courseName)
+	{
+		let container = document.getElementsByClassName('courses-update-container')[0];
+		container.setAttribute('style','display:block');
+		let name = courseName.courseName;
+		let id = courseId.courseId;
+		console.log(name);
+	}
 	getCourses()
 	{
 		console.log('class button clicked');
@@ -136,7 +163,9 @@ class Console extends React.Component {
 			//Inner loop to create children
       		for (let j = 0; j < this.state.courses.length; j++) 
       		{
-        		children.push(<tr key={"student" + j.toString()}><td key="id">{this.state.courses[j].id}</td><td key={"name" + j.toString()}>{this.state.courses[j].name}</td><td key={"options"+j.toString()}><button data-id={this.state.courses[j].id} key={"update" + j.toString}>Update</button><button data-id={this.state.courses[j].id} key={"delete"+j}>Delete</button></td></tr>);
+      			let courseId = this.state.courses[j].id;
+      			let courseName = this.state.courses[j].name;
+        		children.push(<tr key={"student" + j.toString()}><td key="id">{this.state.courses[j].id}</td><td key={"name" + j.toString()}>{this.state.courses[j].name}</td><td key={"options"+j.toString()}><button data-id={this.state.courses[j].id} data-name={this.state.courses[j].name} key={"update" + j.toString} onClick={() => this.showCoursesUpdateContainer({courseId},{courseName})}>Update</button><button data-id={this.state.courses[j].id} key={"delete"+j}>Delete</button></td></tr>);
       		}
       		table.push(<tbody key="tbody">{children}</tbody>);
    			return (
@@ -164,6 +193,8 @@ class Console extends React.Component {
 				<div className="col-sm">
 				<button className="classes-button" onClick={() => this.getCourses()}>Get Courses</button>
 				{this.renderCourses()}
+				<div className="courses-update-container">Courses Update Container</div>
+				<div className="courses-delete-container">Courses Delete Container</div>
 				</div>
 				</div>
 				</div>
