@@ -37,6 +37,8 @@ class Courses extends React.Component
 				<table className="courses">
 				{this.props.value}
 				</table>
+
+				<div className="courses-delete-container">Courses Delete Container</div>
 			</div>
 			);
 	}
@@ -129,13 +131,22 @@ class Console extends React.Component {
 			  .then(response => this.checkCourseResponse(response))
 		}
 	}
+	updateCourse()
+	{
+		console.log('in update course function');
+	}
+	// Show the courseUpdateContainer, add in the input with placeholders
 	showCoursesUpdateContainer(courseId, courseName)
 	{
+		let updateCourse = this.updateCourse;
 		let container = document.getElementsByClassName('courses-update-container')[0];
 		container.setAttribute('style','display:block');
 		let name = courseName.courseName;
 		let id = courseId.courseId;
-		console.log(name);
+		let idLabel = document.getElementsByClassName('label-course-update')[0]
+		idLabel.innerHTML = "Course ID: " + id;
+		let input = document.getElementsByClassName('course-input')[0];
+		input.setAttribute('placeholder',name);
 	}
 	getCourses()
 	{
@@ -193,8 +204,12 @@ class Console extends React.Component {
 				<div className="col-sm">
 				<button className="classes-button" onClick={() => this.getCourses()}>Get Courses</button>
 				{this.renderCourses()}
-				<div className="courses-update-container">Courses Update Container</div>
-				<div className="courses-delete-container">Courses Delete Container</div>
+				<div className="courses-update-container">
+					<h4 className="title">Courses Update Container</h4><br />
+					<label className="label-course-update"></label><br />
+					<input className="course-input" type="text" placeholder=" "/>
+					<button onClick={() => this.updateCourse()}>Update</button>
+				</div>
 				</div>
 				</div>
 				</div>
