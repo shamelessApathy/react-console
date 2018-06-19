@@ -14,11 +14,30 @@ class Students extends React.Component
 	{
 		return (
 			<div>
-				<table>
+				<table className="students">
 				{this.props.value}
 				</table>
 			</div>
 			); 
+	}
+}
+
+class Courses extends React.Component
+{
+	constructor(props)
+	{
+		super(props);
+	}
+
+	render(container)
+	{
+		return (
+			<div>
+				<table className="courses">
+				{this.props.value}
+				</table>
+			</div>
+			);
 	}
 }
 class Console extends React.Component {
@@ -27,6 +46,7 @@ class Console extends React.Component {
 		super(props);
 		this.state ={
 			students: 0,
+			courses: 0,
 		}
 	}
 	checkStudentResponse(response)
@@ -69,7 +89,7 @@ class Console extends React.Component {
 	      				<Students 
 	      					value={table}
 	      				/>
-	      				<button onClick={()=> this.createStudent()}>Create New Student</button><input className="student-name" id="student-name" placeholder="New Student Name Here" type="text"/>
+	      				<button className="student-new-button" onClick={()=> this.createStudent()}>Create New Student</button><input className="student-name" id="student-name" placeholder="New Student Name Here" type="text"/>
       				</div>
       			);
 		}
@@ -89,11 +109,44 @@ class Console extends React.Component {
 		  axios.get('http://localhost:3001/students')
     	.then(response => this.setStudents(response.data))
 	}
-	getClasses()
+	getCourses()
 	{
 		console.log('class button clicked');
 			axios.get('http://localhost:3001/courses')
-			.then(response => console.log(response))
+			.then(response => this.setCourses(response))
+	}
+	setCourses(response)
+	{
+		let courses = response.data;
+		this.setState({
+			courses: courses
+		})
+		console.log(this.state.courses);
+		console.log("length: " + this.state.courses.length);
+	}
+	renderCourses()
+	{
+		if (this.state.courses !== 0)
+		{
+			console.log("courses state no longer equals 0");
+			let table = []
+			let children = []
+			table.push(<thead key="table-head"><tr key="heading-row"><th key="id-head">ID</th><th key="name-head">NAME</th><th key="options-head">OPTIONS</th></tr></thead>);
+			//Inner loop to create children
+      		for (let j = 0; j < this.state.courses.length; j++) 
+      		{
+        		children.push(<tr key={"student" + j.toString()}><td key="id">{this.state.courses[j].id}</td><td key={"name" + j.toString()}>{this.state.courses[j].name}</td><td key={"options"+j.toString()}><button key={"update" + j.toString}>Update</button><button key={"delete"+j}>Delete</button></td></tr>);
+      		}
+      		table.push(<tbody key="tbody">{children}</tbody>);
+   			return (
+   				<div>
+      				<Courses 
+      					value={table}
+      				/>
+	   				<button className="course-new-button" onClick={()=> this.createCourse()}>Create New Course</button><input className="course-name" id="course-name" placeholder="New Course Name Here" type="text"/>
+   				</div>
+      			);	
+		}
 	}
 	render()
 	{
@@ -101,9 +154,11 @@ class Console extends React.Component {
 		<div>
 			<div className="console">
 				<h4 className="title">React Console</h4>
-				<button onClick={()=> this.getStudents()}>Get Students</button>
-				<button onClick={() => this.getClasses()}>Get Classes</button>
+				<button className="students-button" onClick={()=> this.getStudents()}>Get Students</button>
+				<button className="classes-button" onClick={() => this.getCourses()}>Get Courses</button>
+				<div className="clear"></div>
 				{this.renderStudents()}
+				{this.renderCourses()}
 			</div>
 		</div>
 		);

@@ -5,8 +5,8 @@ body {
 }
 
 .console {
-	width:700px;
-	height:500px;
+	width:850px;
+	height:800px;
 	border:2px solid black;
 	margin:0 auto;
 }
@@ -20,8 +20,40 @@ input
 	margin-left:10px;
 }
 .students
-{
-	height:200px;
-	width:200px;
+{	
+	float:left;
+	width:49%;
 	border:1px solid red;
+}
+.courses
+{
+	float:right;
+	width:49%;
+	border:1px solid blue;
+}
+.students-button
+{
+	float:left;
+}
+.classes-button
+{
+	float:right;
+}
+.clear
+{
+	width:100%;
+	float:none;
+	clear:both;
+}
+.course-name
+{
+	float:right;
+}
+.course-new-button
+{
+	float:right;
+}
+.student-new-button
+{
+	float:left;
 }
