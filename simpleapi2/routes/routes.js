@@ -73,8 +73,34 @@ var appRouter = function (app) {
 	})
 	// Create New Student Router and Function
 	app.post("/students/create", function(req, res){
-				res.header("Access-Control-Allow-Origin", "*");
-				res.send("Got to the end point");
+				console.log("In createStudents on Node side");
+				console.log(req.body.student);
+				var student = req.body.student;
+
+				var mysql = require('mysql');
+				var con = mysql.createConnection({
+					host:"localhost",
+					user:"test",
+					password:"test",
+					database:"Hogwarts"
+				});
+
+				con.connect(function(err){
+					if (err) throw err;
+					console.log("Connected!");
+					var sql = "INSERT INTO Students (name) VALUES ('" + student +"');";
+					console.log(sql);
+					con.query(sql, function(err, result){
+						if (err) throw err;
+						if (result.affectedRows === 1)
+						{
+							res.header("Access-Control-Allow-Origin", "*");
+							res.send("success");
+						}
+					})
+				})
+				//res.header("Access-Control-Allow-Origin", "*");
+				
 	})
 }
 
