@@ -50,11 +50,56 @@ class Console extends React.Component {
 			courses: 0,
 		}
 	}
+	updateStudent()
+	{
+		console.log('in the updateStudent function');
+		let updateButton = document.getElementsByClassName('student-update-button')[0];
+		let updateInput = document.getElementsByClassName('student-update-input')[0]
+		let studentId = updateButton.getAttribute('data-id');
+		let newName = updateInput.value;
+
+		// Send POST request to express server to update student
+		axios.post("http://localhost:3001/students/update", {studentId, newName})
+			  .then(response => this.checkStudentResponse(response)) 
+
+	}
+	showStudentsUpdateContainer(studentId, studentName)
+	{
+		console.log('in the showStudentsUpdateContainer function');
+		let container = document.getElementsByClassName('students-update-container')[0];
+		container.setAttribute('style','display:block');
+		let updateMsg = document.getElementsByClassName('student-update-message')[0];
+		updateMsg.innerHTML = "Update student id: "+studentId.studentId+"?";
+		let updateInput = document.getElementsByClassName('student-update-input')[0];
+		updateInput.setAttribute('placeholder', studentName.studentName); 
+		let updateButton = document.getElementsByClassName('student-update-button')[0];
+		updateButton.setAttribute('data-id', studentId.studentId);
+	}
+	showStudentDeleteContainer(studentId, studentName)
+	{
+		console.log('in the showStudentDeleteContainer function');
+		let container = document.getElementsByClassName('student-delete-container')[0];
+		container.setAttribute('style', 'display:block');
+	}
+	hideStudentsUpdateContainer()
+	{
+		let container = document.getElementsByClassName('students-update-container')[0];
+		let updateButton = document.getElementsByClassName('student-update-button')[0];
+		let updateInput = document.getElementsByClassName('student-update-input')[0];
+		let updateMsg = document.getElementsByClassName('student-update-message')[0];
+
+		updateButton.setAttribute('data-id', "");
+		updateInput.setAttribute('placeholder', "");
+		updateMsg.innerHTML = "";
+		container.setAttribute('style','display:none');
+
+	}
 	checkStudentResponse(response)
 	{
 		if (response.data === "success")
 		{
 			console.log("got a success message!");
+			this.hideStudentsUpdateContainer();
 			this.getStudents();
 		}
 	}
@@ -81,7 +126,9 @@ class Console extends React.Component {
 			 	//Inner loop to create children
       			for (let j = 0; j < this.state.students.length; j++) 
       			{
-        			children.push(<tr key={"student" + j.toString()}><td key="id">{this.state.students[j].id}</td><td key={"name" + j.toString()}>{this.state.students[j].name}</td><td key={"options"+j.toString()}><button data-id={this.state.students[j].id} key={"update" + j.toString}>Update</button><button data-id={this.state.students[j].id} key={"delete"+j}>Delete</button></td></tr>);
+      				let studentId = this.state.students[j].id;
+      				let studentName = this.state.students[j].name;
+        			children.push(<tr key={"student" + j.toString()}><td key="id">{this.state.students[j].id}</td><td key={"name" + j.toString()}>{this.state.students[j].name}</td><td key={"options"+j.toString()}><button onClick={() => this.showStudentsUpdateContainer({studentId},{studentName})} data-id={this.state.students[j].id} key={"update" + j.toString}>Update</button><button onClick={() => this.showStudentDeleteContainer({studentId},{studentName})}  data-id={this.state.students[j].id} key={"delete"+j}>Delete</button></td></tr>);
       			}
       			table.push(<tbody key="tbody">{children}</tbody>);
 
@@ -201,6 +248,7 @@ class Console extends React.Component {
 			axios.get('http://localhost:3001/courses')
 			.then(response => this.setCourses(response))
 	}
+	// Set Course inside of the state, state change will force re-render of components
 	setCourses(response)
 	{
 		let courses = response.data;
@@ -210,6 +258,7 @@ class Console extends React.Component {
 		console.log(this.state.courses);
 		console.log("length: " + this.state.courses.length);
 	}
+	// Render Courses function, layout of the entire component right here, have to do a for loop because it's easier to build the element that way (Check into mapping instead later on)
 	renderCourses()
 	{
 		if (this.state.courses !== 0)
@@ -236,6 +285,7 @@ class Console extends React.Component {
       			);	
 		}
 	}
+	// Console's render function, the big and dandy render function for the entire React Console
 	render()
 	{
 		return (
@@ -247,6 +297,15 @@ class Console extends React.Component {
 				<div className="col-sm">
 				<button className="students-button" onClick={()=> this.getStudents()}>Get Students</button>
 				{this.renderStudents()}
+				<div className="students-update-container">
+				<h4 className="title">Student Update Container</h4>
+				<p className="student-update-message"></p>
+				<input className="student-update-input" type="text" placeholder=""/><br />
+				<button type="button" className="student-update-button" onClick={() => this.updateStudent()}>UPDATE STUDENT</button>
+				</div>
+				<div className="student-delete-container">
+				<p>This is the delete container</p>
+				</div>
 				</div>
 				<div className="col-sm">
 				<button className="classes-button" onClick={() => this.getCourses()}>Get Courses</button>
