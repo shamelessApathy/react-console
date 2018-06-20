@@ -116,6 +116,7 @@ class Console extends React.Component {
 		{
 			console.log("got a success message!");
 			this.hideCoursesUpdateContainer();
+			this.hideDeleteCourseContainer();
 			this.getCourses();
 		}
 	}
@@ -149,6 +150,12 @@ class Console extends React.Component {
 	deleteCourse()
 	{
 		console.log('in the delete course function');
+		let yesButton = document.getElementsByClassName('course-delete-yes')[0];
+		let courseId = yesButton.getAttribute('data-id');
+		// Send Delete request to Node Express Server
+		axios.post("http://localhost:3001/courses/delete", {courseId})
+		.then(response => this.checkCourseResponse(response)) 
+
 	}
 	// Show the delete course container with Yes/No buttons for confirmation before deletion
 	showCoursesDeleteContainer(courseId, courseName)

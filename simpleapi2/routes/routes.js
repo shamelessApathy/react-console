@@ -81,7 +81,7 @@ var appRouter = function (app) {
 	})
 	// Update Existing Course Router and Function
 	app.post("/courses/update", function(req, res){
-				console.log("In createCourse on Node side");
+				console.log("In updateCourse on Node side");
 				console.log(req.body.courseId);
 				var courseId = req.body.courseId;
 				var newName = req.body.newName;
@@ -98,6 +98,36 @@ var appRouter = function (app) {
 					if (err) throw err;
 					console.log("Connected!");
 					var sql = "UPDATE Courses SET name = '"+newName+"' WHERE id = "+courseId+";";
+					console.log(sql);
+					con.query(sql, function(err, result){
+						if (err) throw err;
+						if (result.affectedRows === 1)
+						{
+							res.header("Access-Control-Allow-Origin", "*");
+							res.send("success");
+						}
+					})
+				})				
+	})
+	// Delete Existing Course Router and Function
+	app.post("/courses/delete", function(req, res){
+				console.log("In deleteCourse on Node side");
+				console.log(req.body.courseId);
+				var courseId = req.body.courseId;
+				var newName = req.body.newName;
+
+				var mysql = require('mysql');
+				var con = mysql.createConnection({
+					host:"localhost",
+					user:"test",
+					password:"test",
+					database:"Hogwarts"
+				});
+
+				con.connect(function(err){
+					if (err) throw err;
+					console.log("Connected!");
+					var sql = "DELETE FROM Courses WHERE id = "+courseId+";";
 					console.log(sql);
 					con.query(sql, function(err, result){
 						if (err) throw err;
