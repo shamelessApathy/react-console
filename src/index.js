@@ -37,8 +37,6 @@ class Courses extends React.Component
 				<table className="courses">
 				{this.props.value}
 				</table>
-
-				<div className="courses-delete-container">Courses Delete Container</div>
 			</div>
 			);
 	}
@@ -117,6 +115,7 @@ class Console extends React.Component {
 		if (response.data === "success")
 		{
 			console.log("got a success message!");
+			this.hideCoursesUpdateContainer();
 			this.getCourses();
 		}
 	}
@@ -131,22 +130,63 @@ class Console extends React.Component {
 			  .then(response => this.checkCourseResponse(response))
 		}
 	}
-	updateCourse()
+	updateCourse(event)
 	{
 		console.log('in update course function');
+		console.log(event);
+		let button = event.target;
+		let input = document.getElementsByClassName('course-input')[0];
+		let newName = input.value;
+		let courseId = button.getAttribute('data-id');
+		console.log(newName);
+		console.log(button);
+
+		// Send Update request to Node Express Server
+		axios.post("http://localhost:3001/courses/update", {courseId, newName})
+			  .then(response => this.checkCourseResponse(response)) 
+	}
+	// Sends request to express server to delete the course
+	deleteCourse()
+	{
+		console.log('in the delete course function');
+	}
+	// Show the delete course container with Yes/No buttons for confirmation before deletion
+	showCoursesDeleteContainer(courseId, courseName)
+	{
+		let container = document.getElementsByClassName('course-delete-container')[0];
+		container.setAttribute('style','display:block');
+		let deleteMsg = document.getElementsByClassName('delete-confirmation-message')[0];
+		deleteMsg.innerHTML = "<p> Are you sure you want to delete: "+ courseName.courseName +"?</p>";
+		let yesButton = document.getElementsByClassName('course-delete-yes')[0];
+		yesButton.setAttribute('data-id', courseId.courseId);
 	}
 	// Show the courseUpdateContainer, add in the input with placeholders
 	showCoursesUpdateContainer(courseId, courseName)
 	{
-		let updateCourse = this.updateCourse;
 		let container = document.getElementsByClassName('courses-update-container')[0];
-		container.setAttribute('style','display:block');
 		let name = courseName.courseName;
 		let id = courseId.courseId;
-		let idLabel = document.getElementsByClassName('label-course-update')[0]
-		idLabel.innerHTML = "Course ID: " + id;
+		let idLabel = document.getElementsByClassName('label-course-update')[0];
 		let input = document.getElementsByClassName('course-input')[0];
+		let finalUpdate = document.getElementsByClassName('course-final-update')[0];
+		idLabel.innerHTML = "Course ID: " + id;
+		container.setAttribute('style','display:block');
 		input.setAttribute('placeholder',name);
+		finalUpdate.setAttribute('data-id',courseId.courseId); 
+	}
+	hideDeleteCourseContainer()
+	{
+		let container = document.getElementsByClassName('course-delete-container')[0];
+		container.setAttribute('style','display:none');
+		let yesButton = document.getElementsByClassName('course-delete-yes')[0];
+		yesButton.setAttribute('data-id',' ');
+	}
+	hideCoursesUpdateContainer()
+	{
+		let container = document.getElementsByClassName('courses-update-container')[0];
+		let input = document.getElementsByClassName('course-input')[0];
+		input.value = "";
+		container.setAttribute('style','display:none');
 	}
 	getCourses()
 	{
@@ -176,7 +216,7 @@ class Console extends React.Component {
       		{
       			let courseId = this.state.courses[j].id;
       			let courseName = this.state.courses[j].name;
-        		children.push(<tr key={"student" + j.toString()}><td key="id">{this.state.courses[j].id}</td><td key={"name" + j.toString()}>{this.state.courses[j].name}</td><td key={"options"+j.toString()}><button data-id={this.state.courses[j].id} data-name={this.state.courses[j].name} key={"update" + j.toString} onClick={() => this.showCoursesUpdateContainer({courseId},{courseName})}>Update</button><button data-id={this.state.courses[j].id} key={"delete"+j}>Delete</button></td></tr>);
+        		children.push(<tr key={"student" + j.toString()}><td key="id">{this.state.courses[j].id}</td><td key={"name" + j.toString()}>{this.state.courses[j].name}</td><td key={"options"+j.toString()}><button data-id={this.state.courses[j].id} data-name={this.state.courses[j].name} key={"update" + j.toString} onClick={() => this.showCoursesUpdateContainer({courseId},{courseName})}>Update</button><button data-id={this.state.courses[j].id} onClick={()=> this.showCoursesDeleteContainer({courseId}, {courseName})} key={"delete"+j}>Delete</button></td></tr>);
       		}
       		table.push(<tbody key="tbody">{children}</tbody>);
    			return (
@@ -208,7 +248,12 @@ class Console extends React.Component {
 					<h4 className="title">Courses Update Container</h4><br />
 					<label className="label-course-update"></label><br />
 					<input className="course-input" type="text" placeholder=" "/>
-					<button onClick={() => this.updateCourse()}>Update</button>
+					<button className="course-final-update" onClick={(event) => this.updateCourse(event)}>Update</button>
+				</div>
+				<div className="course-delete-container">
+					<h4 className="title">Course Delete Confirmation</h4><br />
+					<div className="delete-confirmation-message"></div>
+					<button className="course-delete-yes" onClick={()=> this.deleteCourse()}>YES</button><button onClick={()=> this.hideDeleteCourseContainer()}>NO</button>
 				</div>
 				</div>
 				</div>
