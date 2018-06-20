@@ -180,6 +180,31 @@ class Console extends React.Component {
 		  axios.get('http://localhost:3001/students')
     	.then(response => this.setStudents(response.data))
 	}
+	checkStudentSearchResponse(response)
+	{
+		console.log(response);
+		if (response.data === "failed")
+		{
+			alert("No such student in database");
+		}
+		else
+		{
+			this.setStudents(response.data);
+		}
+	}
+	searchStudent()
+	{
+		let studentName = document.getElementsByClassName('student-search-input')[0].value
+		if (studentName === "")
+		{
+			alert('you must fill in the appropriate field for student name');
+		}
+		else
+		{
+		  axios.post('http://localhost:3001/students/search', {studentName})
+    	.then(response => this.checkStudentSearchResponse(response))			
+		}
+	}
 	checkCourseResponse(response)
 	{
 		if (response.data === "success")
@@ -320,6 +345,9 @@ class Console extends React.Component {
 				<div className="row">
 				<div className="col-sm">
 				<button className="students-button" onClick={()=> this.getStudents()}>Get Students</button>
+				<div className="student-search">
+					<input className="student-search-input" placeholder="Student Search" type="text"/><button onClick={() => this.searchStudent()}>Search</button>
+				</div>
 				{this.renderStudents()}
 				<div className="students-update-container">
 				<h4 className="title">Student Update Container</h4>

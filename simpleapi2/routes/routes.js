@@ -132,6 +132,38 @@ var appRouter = function (app) {
 			})
 		})
 	})
+	// Search for a particular student by name
+		app.post("/students/search", function(req, res){
+		var studentName = req.body.studentName;
+		var mysql = require('mysql');
+		var con = mysql.createConnection({
+			host: "localhost",
+			user: "test",
+			password: "test",
+			database: "Hogwarts"
+		});
+
+		con.connect(function(err) {
+			if (err) throw err;
+			console.log("Connected!");
+			var sql = "SELECT * FROM Students WHERE name = '" + studentName + "';";
+			console.log(sql);
+			con.query(sql, function (err, result){
+				if (err) throw err;
+				if (result.length < 1)
+				{
+					res.header("Access-Control-Allow-Origin", "*");
+					res.send("failed");
+				}
+				else
+				{
+					res.header("Access-Control-Allow-Origin", "*");
+					res.send(result);
+				}
+
+			})
+		})
+	})
 	// Delete Student Router and Function
 	app.post("/students/delete", function(req, res){
 				console.log("In deleteStudent on Node side");
