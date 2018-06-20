@@ -315,6 +315,7 @@ class Console extends React.Component {
 		<div>
 			<div className="console">
 				<h4 className="title">React Console</h4>
+				<p className="title">Hogwarts School of Witchcraft and Wizardy  <img src={ require('./wizard-hat.png')} alt="wizard hat" className="wizard-hat"/></p>
 				<div className="container">
 				<div className="row">
 				<div className="col-sm">
