@@ -132,6 +132,35 @@ var appRouter = function (app) {
 			})
 		})
 	})
+	// Delete Student Router and Function
+	app.post("/students/delete", function(req, res){
+				console.log("In deleteStudent on Node side");
+				console.log(req.body.studentId);
+				var studentId = req.body.studentId;
+
+				var mysql = require('mysql');
+				var con = mysql.createConnection({
+					host:"localhost",
+					user:"test",
+					password:"test",
+					database:"Hogwarts"
+				});
+
+				con.connect(function(err){
+					if (err) throw err;
+					console.log("Connected!");
+					var sql = "DELETE FROM Students WHERE id = "+studentId+";";
+					console.log(sql);
+					con.query(sql, function(err, result){
+						if (err) throw err;
+						if (result.affectedRows === 1)
+						{
+							res.header("Access-Control-Allow-Origin", "*");
+							res.send("success");
+						}
+					})
+				})				
+	})
 	// Update Student Router and Function
 	app.post("/students/update", function(req, res){
 				console.log("In updateStudents on Node side");

@@ -80,6 +80,19 @@ class Console extends React.Component {
 		console.log('in the showStudentDeleteContainer function');
 		let container = document.getElementsByClassName('student-delete-container')[0];
 		container.setAttribute('style', 'display:block');
+		let yesButton = document.getElementsByClassName('student-yes-delete')[0];
+		yesButton.setAttribute('data-id', studentId.studentId);
+		let deleteMsg = document.getElementsByClassName('student-delete-message')[0];
+		deleteMsg.innerHTML = "Are you sure you want to delete: "+studentName.studentName+" ?";
+	}
+	hideStudentDeleteContainer()
+	{
+		let container = document.getElementsByClassName('student-delete-container')[0];
+		let yesButton = document.getElementsByClassName('student-yes-delete')[0];
+		let deleteMsg = document.getElementsByClassName('student-delete-message')[0];
+		deleteMsg.innerHTML = "";
+		yesButton.setAttribute('data-id', "");
+		container.setAttribute('style','display:none');
 	}
 	hideStudentsUpdateContainer()
 	{
@@ -100,6 +113,7 @@ class Console extends React.Component {
 		{
 			console.log("got a success message!");
 			this.hideStudentsUpdateContainer();
+			this.hideStudentDeleteContainer();
 			this.getStudents();
 		}
 	}
@@ -113,6 +127,15 @@ class Console extends React.Component {
 			axios.post("http://localhost:3001/students/create", {student})
 			  .then(response => this.checkStudentResponse(response))
 		}
+	}
+	deleteStudent()
+	{
+		console.log('in deleteStudent function');
+		let studentId = document.getElementsByClassName('student-yes-delete')[0].getAttribute('data-id');
+		console.log(studentId);
+		// Send POST request to Express server to delete Student by ID
+				axios.post("http://localhost:3001/students/delete", {studentId})
+			  .then(response => this.checkStudentResponse(response)) 
 	}
 
 	renderStudents()
@@ -304,7 +327,9 @@ class Console extends React.Component {
 				<button type="button" className="student-update-button" onClick={() => this.updateStudent()}>UPDATE STUDENT</button>
 				</div>
 				<div className="student-delete-container">
-				<p>This is the delete container</p>
+				<h4 className="title">Student Delete Confirmation</h4>
+				<p className="student-delete-message"></p>
+				<button className="student-yes-delete" onClick={() => this.deleteStudent()}>YES</button><button onClick={() => this.hideStudentDeleteContainer()}>NO</button>
 				</div>
 				</div>
 				<div className="col-sm">
