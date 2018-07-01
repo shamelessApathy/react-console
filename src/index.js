@@ -345,9 +345,7 @@ class Console extends React.Component {
 				<div className="row">
 				<div className="col-sm">
 				<button className="students-button" onClick={()=> this.getStudents()}>Get Students</button>
-				<div className="student-search">
-					<input className="student-search-input" placeholder="Student Search" type="text"/><button onClick={() => this.searchStudent()}>Search</button>
-				</div>
+				<input className="student-search-input" placeholder="Student Search" type="text"/><button onClick={() => this.searchStudent()}>Search</button>
 				{this.renderStudents()}
 				<div className="students-update-container">
 				<h4 className="title">Student Update Container</h4>

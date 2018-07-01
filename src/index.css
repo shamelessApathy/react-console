@@ -32,6 +32,10 @@ input
 	text-align:center;
 	margin:0 auto;
 }
+.student-search-input
+{
+	margin-left:10px;
+}
 .classes-button
 {
 	text-align:center;
